@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import PerfilUsuario, CosechaProducto
 
-# Register your models here.
+admin.site.register(PerfilUsuario)
+admin.site.register(CosechaProducto)
