@@ -335,3 +335,26 @@ def api_validar_ticket(request):
         return JsonResponse({'mensaje': '¡Venta validada exitosamente! Transacción cerrada y verificada.'})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+@csrf_exempt
+def api_eliminar_producto(request, producto_id):
+    if request.method not in ['POST', 'DELETE']:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    try:
+        data = json.loads(request.body) if request.body else {}
+        usuario_id = data.get('usuario_id')
+        producto = CosechaProducto.objects.get(id=producto_id)
+
+        if usuario_id:
+            user = User.objects.get(id=usuario_id)
+            perfil = getattr(user, 'perfil', None)
+            es_admin = (perfil and perfil.rol == 'ADMIN') or user.is_superuser
+            if producto.vendedor != user and not es_admin:
+                return JsonResponse({'error': 'No tienes permiso para eliminar esta cosecha.'}, status=403)
+
+        producto.delete()
+        return JsonResponse({'mensaje': 'Cosecha eliminada exitosamente del inventario.'}, status=200)
+    except CosechaProducto.DoesNotExist:
+        return JsonResponse({'error': 'La cosecha ya no existe.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/productos/', views.api_productos, name='api_productos'),
     path('api/perfil/vendedor/<int:vendedor_id>/', views.api_perfil_vendedor, name='api_perfil_vendedor'),
     path('api/pedidos/vendedor/<int:vendedor_id>/', views.api_pedidos_vendedor, name='api_pedidos_vendedor'),
+    path('api/productos/<int:producto_id>/eliminar/', views.api_eliminar_producto, name='api_eliminar_producto'),
     
     # ENDPOINTS DE TICKETS Y CONTROL DE STOCK
     path('api/tickets/crear/', views.api_crear_ticket, name='api_crear_ticket'),
