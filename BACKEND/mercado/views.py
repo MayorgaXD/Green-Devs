@@ -156,10 +156,15 @@ def api_perfil_vendedor(request, vendedor_id):
                 'imagen': request.build_absolute_uri(p.imagen.url) if p.imagen else None,
             })
             
+        foto_url = None
+        if perfil and hasattr(perfil, 'foto_perfil') and perfil.foto_perfil:
+            foto_url = request.build_absolute_uri(perfil.foto_perfil.url)
+
         return JsonResponse({
             'vendedor': {
                 'id': user.id,
                 'username': user.username,
+                'foto': foto_url,
                 'telefono': perfil.telefono if perfil and perfil.telefono else 'No proporcionado',
                 'finca': perfil.finca if perfil and perfil.finca else 'General',
                 'region': perfil.region if perfil else 'Nueva Guinea',
@@ -171,8 +176,7 @@ def api_perfil_vendedor(request, vendedor_id):
         }, status=200)
     except User.DoesNotExist:
         return JsonResponse({'error': 'Vendedor no encontrado'}, status=404)
-
-
+    
 # ==========================================
 # 3. TICKETS, INVENTARIO Y BANDEJA EN TIEMPO REAL
 # ==========================================

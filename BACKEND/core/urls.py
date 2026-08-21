@@ -19,3 +19,6 @@ urlpatterns = [
     path('api/tickets/validar/', views.api_validar_ticket, name='api_validar_ticket'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
